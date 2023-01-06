@@ -1,6 +1,16 @@
-from supervisely.app.widgets import Card, Container, Field, Input, SelectString, Button, FileViewer
+from supervisely.app.widgets import (
+    Card,
+    Container,
+    Field,
+    Input,
+    SelectString,
+    Button,
+)
 import src.globals as g
 import os
+
+import src.ui.preview_bucket_items as preview_bucket_items
+import src.ui.import_settings as import_settings
 
 provider_selector = SelectString(
     values=["google", "s3", "azure"], labels=["google cloud storage", "amazon s3", "azure storage"]
@@ -21,29 +31,27 @@ card = Card(
     content=Container(
         widgets=[provider, bucket_name],
         direction="horizontal",
-        gap=1,
+        gap=2,
         fractions=["1", "5"],
     ),
 )
 
-file_viewer = FileViewer(files_list=[])
-
 
 @connect_button.click
 def preview_items():
-    bucket_name = provider_selector.get_value()
-    remote_path = remote_path_input.get_value()
+    g.FILE_SIZE = {}
+    provider = provider_selector.get_value()
+    bucket_name = remote_path_input.get_value()
 
-    path = f"{bucket_name}://{remote_path}"
-
-    files = g.api.remote_storage.list(path, recursive=False, limit=g.USER_PREVIEW_LIMIT + 1)
+    path = f"{provider}://{bucket_name}"
+    files = g.api.remote_storage.list(path, recursive=True, limit=g.USER_PREVIEW_LIMIT + 1)
 
     files = [f for f in files if f["type"] == "folder" or (f["type"] == "file" and f["size"] > 0)]
     tree_items = []
     for file in files:
         path = os.path.join(f"/{bucket_name}", file["prefix"], file["name"])
         tree_items.append({"path": path, "size": file["size"], "type": file["type"]})
-
-    g.CURRENT_FILES = tree_items
-
-    # card.update_data()
+        g.FILE_SIZE[path] = file["size"]
+    preview_bucket_items.file_viewer.update_file_tree(files_list=tree_items)
+    preview_bucket_items.card.show()
+    import_settings.card.show()

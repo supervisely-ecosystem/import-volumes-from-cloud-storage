@@ -17,5 +17,3 @@ STORAGE_DIR = sly.app.get_data_dir()
 USER_PREVIEW_LIMIT = 100
 FILE_SIZE = None
 BATCH_SIZE = 10000
-
-CURRENT_FILES = []
