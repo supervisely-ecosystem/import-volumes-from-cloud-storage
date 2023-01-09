@@ -1,12 +1,12 @@
 {
   "name": "Import volumes from cloud storage",
   "type": "app",
+  "version": "2.0.0",
   "description": "Import volumes from cloud (Google Cloud Storage, Amazon S3, Microsoft Azure, ...)",
   "categories": ["import", "volumes"],
   "docker_image": "supervisely/base-py-sdk:6.68.94",
   "icon": "",
   "poster": "",
-  "disable_stop": true,
   "entrypoint": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
   "port": 8000
 }
