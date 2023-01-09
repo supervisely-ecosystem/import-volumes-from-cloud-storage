@@ -107,7 +107,6 @@ def import_volumes():
             title="There are no volumes to import",
             description="Nothing to download",
         )
-        return
 
     project_id = destination.get_selected_project_id()
     if project_id is None:
@@ -171,7 +170,6 @@ def upload_volumes_to_destination(project_id, dataset_id, local_dir, progress):
         if sly.volume.get_extension(path=item_path) is None:
             sly.logger.warn(f"Can not recognize file extension {item_path}, serie will be skipped")
             continue
-        # name = f"{sly.fs.get_file_name(path=item_path)}.nrrd"
         name = f"{serie_id}.nrrd"
         name = generate_free_name(used_names=used_volumes_names, possible_name=name, with_ext=True)
         used_volumes_names.append(name)
