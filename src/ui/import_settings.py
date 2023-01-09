@@ -161,7 +161,8 @@ def list_objects(api, full_dir_path):
 
 
 def upload_volumes_to_destination(project_id, dataset_id, local_dir, progress):
-    used_volumes_names = []
+    names_in_ds = [vol_info.name for vol_info in g.api.volume.get_list(dataset_id=dataset_id)]
+    used_volumes_names = names_in_ds
 
     # DICOM
     series_infos = sly.volume.inspect_dicom_series(root_dir=local_dir)
