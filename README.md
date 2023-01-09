@@ -30,10 +30,6 @@ List of providers:
 Files in `DICOM` format will be automatically converted to `NRRD` format during import.
 App is compatible with `.DCM` and `.NRRD` formats, dicom files without `.dcm` extension are also compatible.
 
-⚠️ Notice: for any of these import types app downloads video to its temp directory, processes it and extracts some 
-technical information like timestamp-frame index mapping, number of streams, resolution and so on. Once the video is 
-processed, it will be removed from temp directory. This is the one time procedure.
-
 # How To Use
 
 0. Ask your instance administrator to add cloud credentials to instance settings. It can be done both in .env
