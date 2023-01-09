@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://user-images.githubusercontent.com/106374579/186632514-667f50f1-c261-4ad2-a24b-c8092419eb31.png"/>
+<img src="https://user-images.githubusercontent.com/48913536/211333857-d7f7a37d-5a71-456c-ab22-0f73a40cda4d.png"/>
 
 # Import volumes from cloud storage
 
@@ -37,7 +37,7 @@ processed, it will be removed from temp directory. This is the one time procedur
 # How To Use
 
 0. Ask your instance administrator to add cloud credentials to instance settings. It can be done both in .env
-   configuration files or in Admin UI dashboard. Learn more in docs: [link1](https://docs.supervise.ly/enterprise-edition/installation/post-installation#configure-your-instance), 
+   configuration files or in Admin UI dashboard. Learn more in docs: [link1](https://docs.supervise.ly/enterprise-edition/installation/post-installation#configure-your-instance),
    [link2](https://docs.supervise.ly/enterprise-edition/advanced-tuning/s3#links-plugin-cloud-providers-support).
    In case of any questions or issues, please contact tech support.
 1. Add app to your team from Ecosystem
@@ -48,4 +48,4 @@ processed, it will be removed from temp directory. This is the one time procedur
 
 # Screenshot
 
-<img src=""/>
+<img src="https://user-images.githubusercontent.com/48913536/211333848-cabe2038-97bc-49d0-ad4e-827cc674a661.png"/>
