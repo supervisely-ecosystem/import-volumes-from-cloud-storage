@@ -136,7 +136,7 @@ def import_volumes():
         ):
 
             for remote_path, local_path in zip(batch_remote_paths, batch_local_paths):
-                g.api.remote_storage.download_path(remote_path, local_path)
+                # g.api.remote_storage.download_path(remote_path, local_path)
                 pbar.update()
 
         local_dir = os.path.join(g.STORAGE_DIR, bucket_name)
@@ -170,7 +170,8 @@ def upload_volumes_to_destination(project_id, dataset_id, local_dir, progress):
         if sly.volume.get_extension(path=item_path) is None:
             sly.logger.warn(f"Can not recognize file extension {item_path}, serie will be skipped")
             continue
-        name = f"{sly.fs.get_file_name(path=item_path)}.nrrd"
+        # name = f"{sly.fs.get_file_name(path=item_path)}.nrrd"
+        name = f"{serie_id}.nrrd"
         name = generate_free_name(used_names=used_volumes_names, possible_name=name, with_ext=True)
         used_volumes_names.append(name)
         g.api.volume.upload_dicom_serie_paths(
