@@ -11,8 +11,6 @@ from supervisely.app.widgets import (
     Progress,
 )
 
-from supervisely.volume.volume import ALLOWED_VOLUME_EXTENSIONS
-
 from supervisely.io.fs import (
     get_file_ext,
     get_file_name,
@@ -23,20 +21,18 @@ import src.ui.preview_bucket_items as preview_bucket_items
 
 import src.globals as g
 
-# output_dataset = DatasetThumbnail()
-# output_dataset.hide()
-
 anonym_checkbox = Checkbox(content=Text(text="Anonymize patient name and ID for DICOM files"))
 destination = DestinationProject(workspace_id=g.WORKSPACE_ID, project_type="volumes")
 import_button = Button(text="Start")
 
 progress_bar = Progress()
 progress_bar.hide()
-# output_project = ProjectThumbnail()
-# output_project.hide()
+
+output_project = ProjectThumbnail()
+output_project.hide()
 
 destination_container = Container(
-    widgets=[anonym_checkbox, destination, import_button, progress_bar]
+    widgets=[anonym_checkbox, destination, import_button, progress_bar, output_project]
 )
 
 card = Card(
@@ -52,12 +48,10 @@ card.hide()
 @import_button.click
 def import_volumes():
     progress_bar.hide()
-    # output_project.hide()
-    import_button.hide()
+    output_project.hide()
 
     paths = preview_bucket_items.file_viewer.get_selected_items()
     remote_paths = []
-    widget_paths = []
     local_paths = []
 
     provider = connect_to_bucket.provider_selector.get_value()
@@ -70,7 +64,6 @@ def import_volumes():
             return
         full_remote_path = f"{provider}://{path.lstrip('/')}"
         remote_paths.append(full_remote_path)
-        widget_paths.append(path)
         local_path = os.path.join(g.STORAGE_DIR, path.lstrip("/"))
         sly.fs.ensure_base_path(local_path)
         local_paths.append(local_path)
@@ -137,16 +130,13 @@ def import_volumes():
 
     progress_bar.show()
     with progress_bar(message="Importing items", total=len(local_paths) * 2) as pbar:
-        for batch_remote_paths, batch_temp_paths, batch_local_paths in zip(
+        for batch_remote_paths, batch_local_paths in zip(
             sly.batched(remote_paths, batch_size=g.BATCH_SIZE),
-            sly.batched(widget_paths, batch_size=g.BATCH_SIZE),
             sly.batched(local_paths, batch_size=g.BATCH_SIZE),
         ):
 
-            for remote_path, temp_path, local_path in zip(
-                batch_remote_paths, batch_temp_paths, batch_local_paths
-            ):
-                # g.api.remote_storage.download_path(remote_path, local_path)
+            for remote_path, local_path in zip(batch_remote_paths, batch_local_paths):
+                g.api.remote_storage.download_path(remote_path, local_path)
                 pbar.update()
 
         local_dir = os.path.join(g.STORAGE_DIR, bucket_name)
@@ -203,10 +193,9 @@ def upload_volumes_to_destination(project_id, dataset_id, local_dir, progress):
         )
         progress.update()
 
-    # project_info = g.api.project.get_info_by_id(id=project_id)
-    # output_project = output_project.set(info=project_info)
-    # output_project.show()
-    import_button.show()
+    project_info = g.api.project.get_info_by_id(id=project_id)
+    output_project.set(project_info=project_info)
+    output_project.show()
 
 
 def generate_free_name(used_names, possible_name, with_ext=False, extend_used_names=False):
