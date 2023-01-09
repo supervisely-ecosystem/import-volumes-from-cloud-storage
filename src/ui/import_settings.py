@@ -136,7 +136,7 @@ def import_volumes():
         ):
 
             for remote_path, local_path in zip(batch_remote_paths, batch_local_paths):
-                # g.api.remote_storage.download_path(remote_path, local_path)
+                g.api.remote_storage.download_path(remote_path, local_path)
                 pbar.update()
 
         local_dir = os.path.join(g.STORAGE_DIR, bucket_name)
