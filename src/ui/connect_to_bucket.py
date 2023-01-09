@@ -19,20 +19,14 @@ provider = Field(title="Provider", content=provider_selector)
 
 remote_path_input = Input()
 connect_button = Button(text="Connect", icon="zmdi zmdi-cloud")
-bucket_name = Field(
-    title="Bucket name",
-    content=Container(widgets=[remote_path_input, connect_button], direction="horizontal"),
-)
+bucket_name = Field(title="Bucket name", content=remote_path_input)
 
 
 card = Card(
     title="1️⃣ Connect to the cloud storage",
     description="Choose cloud service provider and bucket name",
     content=Container(
-        widgets=[provider, bucket_name],
-        direction="horizontal",
-        gap=2,
-        fractions=["1", "5"],
+        widgets=[provider, bucket_name, connect_button],
     ),
 )
 
