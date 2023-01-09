@@ -44,4 +44,4 @@ App is compatible with `.DCM` and `.NRRD` formats, dicom files without `.dcm` ex
 
 # Screenshot
 
-<img src="https://user-images.githubusercontent.com/48913536/211333848-cabe2038-97bc-49d0-ad4e-827cc674a661.png"/>
+<img src="https://user-images.githubusercontent.com/48913536/211368654-336c49cb-aa0d-4ee2-b9c7-65b783ab9c59.png"/>

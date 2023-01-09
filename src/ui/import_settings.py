@@ -1,25 +1,21 @@
-import supervisely as sly
 import os
+
+import supervisely as sly
 from supervisely.app.widgets import (
     Button,
     Card,
+    Checkbox,
     Container,
     DestinationProject,
-    Checkbox,
-    Text,
-    ProjectThumbnail,
     Progress,
+    ProjectThumbnail,
+    Text,
 )
-
-from supervisely.io.fs import (
-    get_file_ext,
-    get_file_name,
-)
-
-import src.ui.connect_to_bucket as connect_to_bucket
-import src.ui.preview_bucket_items as preview_bucket_items
+from supervisely.io.fs import get_file_ext, get_file_name
 
 import src.globals as g
+import src.ui.connect_to_bucket as connect_to_bucket
+import src.ui.preview_bucket_items as preview_bucket_items
 
 anonym_checkbox = Checkbox(content=Text(text="Anonymize patient name and ID for DICOM files"))
 destination = DestinationProject(workspace_id=g.WORKSPACE_ID, project_type="volumes")

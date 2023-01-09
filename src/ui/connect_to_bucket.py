@@ -1,16 +1,10 @@
-from supervisely.app.widgets import (
-    Card,
-    Container,
-    Field,
-    Input,
-    SelectString,
-    Button,
-)
-import src.globals as g
 import os
 
-import src.ui.preview_bucket_items as preview_bucket_items
+from supervisely.app.widgets import Button, Card, Container, Field, Input, SelectString
+
+import src.globals as g
 import src.ui.import_settings as import_settings
+import src.ui.preview_bucket_items as preview_bucket_items
 
 provider_selector = SelectString(
     values=["google", "s3", "azure"], labels=["google cloud storage", "amazon s3", "azure storage"]
