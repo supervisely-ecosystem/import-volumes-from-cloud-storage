@@ -194,7 +194,7 @@ def upload_volumes_to_destination(project_id, dataset_id, local_dir, progress):
         progress.update()
 
     project_info = g.api.project.get_info_by_id(id=project_id)
-    output_project.set(project_info=project_info)
+    output_project.set(info=project_info)
     output_project.show()
 
 
