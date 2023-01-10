@@ -2,7 +2,6 @@ import os
 
 import supervisely as sly
 from dotenv import load_dotenv
-from supervisely.io.fs import mkdir
 
 if sly.is_development():
     load_dotenv("local.env")

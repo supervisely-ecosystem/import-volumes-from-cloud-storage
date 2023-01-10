@@ -64,7 +64,7 @@ def import_volumes():
         sly.fs.ensure_base_path(local_path)
         local_paths.append(local_path)
 
-    # find selected dirs
+    # find selected directories
     selected_dirs = []
     for path in paths:
         if sly.fs.get_file_ext(path) == "":
