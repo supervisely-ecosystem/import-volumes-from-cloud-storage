@@ -51,7 +51,7 @@ def import_volumes():
     local_paths = []
 
     provider = connect_to_bucket.provider_selector.get_value()
-    bucket_name = connect_to_bucket.remote_path_input.get_value()
+    bucket_name = connect_to_bucket.bucket_name_input.get_value()
 
     def _add_to_processing_list(path):
         nonlocal remote_paths, local_paths
