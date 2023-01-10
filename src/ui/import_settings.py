@@ -11,7 +11,7 @@ from supervisely.app.widgets import (
     ProjectThumbnail,
     Text,
 )
-from supervisely.io.fs import get_file_ext, get_file_name
+from supervisely.io.fs import get_file_ext, get_file_name, remove_dir
 
 import src.globals as g
 import src.ui.connect_to_bucket as connect_to_bucket
@@ -189,6 +189,7 @@ def upload_volumes_to_destination(project_id, dataset_id, local_dir, progress):
         )
         progress.update()
 
+    remove_dir(local_dir)
     project_info = g.api.project.get_info_by_id(id=project_id)
     output_project.set(info=project_info)
     output_project.show()
