@@ -12,6 +12,7 @@ from supervisely.app.widgets import (
     Text,
 )
 from supervisely.io.fs import get_file_ext, get_file_name, remove_dir
+from supervisely.volume.volume import ALLOWED_VOLUME_EXTENSIONS
 
 import src.globals as g
 import src.ui.connect_to_bucket as connect_to_bucket
@@ -55,9 +56,13 @@ def import_volumes():
 
     def _add_to_processing_list(path):
         nonlocal remote_paths, local_paths
-        if sly.volume.has_valid_ext(path) is False:
-            sly.logger.warning(f"Unsupported volume extension for path: {path}")
-            return
+
+        # if sly.volume.has_valid_ext(path) is False:
+        if get_file_ext(path).lower() not in ALLOWED_VOLUME_EXTENSIONS:
+            raise sly.app.DialogWindowWarning(
+                title="Unsupported volume extension",
+                description=f"Unsupported volume extension for path: '{path}'. Please remove or deselect file with the following path to proceed. Supported extensions: {', '.join(ALLOWED_VOLUME_EXTENSIONS)}",
+            )
         full_remote_path = f"{provider}://{path.lstrip('/')}"
         remote_paths.append(full_remote_path)
         local_path = os.path.join(g.STORAGE_DIR, path.lstrip("/"))
