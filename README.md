@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://user-images.githubusercontent.com/48913536/211333857-d7f7a37d-5a71-456c-ab22-0f73a40cda4d.png"/>
+<img src="https://user-images.githubusercontent.com/48913536/211368662-fe22dbe0-0542-4694-b1b9-8fdcb68216a4.png"/>
 
 # Import volumes from cloud storage
 
@@ -7,7 +7,6 @@
   <a href="#Overview">Overview</a> •
   <a href="#How-To-Use">How To Use</a>
 </p>
-
 
 [![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/import-volumes-from-cloud-storage)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
