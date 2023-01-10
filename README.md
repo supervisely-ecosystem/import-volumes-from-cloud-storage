@@ -27,7 +27,7 @@ List of providers:
 - and others with s3 compatible interfaces
 
 Files in `DICOM` format will be automatically converted to `NRRD` format during import.
-App is compatible with `.DCM` and `.NRRD` formats, dicom files without `.dcm` extension are also compatible.
+App is compatible with `.DCM` and `.NRRD` formats.
 
 # How To Use
 
