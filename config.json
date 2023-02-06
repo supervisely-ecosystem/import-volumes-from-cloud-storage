@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "description": "Import volumes from cloud (Google Cloud Storage, Amazon S3, Microsoft Azure, ...)",
   "categories": ["import", "volumes"],
-  "docker_image": "supervisely/base-py-sdk:6.69.19",
+  "docker_image": "supervisely/base-py-sdk:6.69.37",
   "icon": "https://user-images.githubusercontent.com/48913536/211333862-55f1960e-2e75-475b-9536-dd018db8732c.png",
   "poster": "https://user-images.githubusercontent.com/48913536/211368662-fe22dbe0-0542-4694-b1b9-8fdcb68216a4.png",
   "entrypoint": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
