@@ -34,6 +34,8 @@ def preview_items():
     path = f"{provider}://{bucket_name}"
     try:
         files = g.api.remote_storage.list(path, recursive=False, limit=g.USER_PREVIEW_LIMIT + 1)
+        sly.logger.debug(msg=f"Current path: {path}.\nRefreshed items tree (try): {files}")
+
     except Exception as e:
         sly.logger.warn(repr(e))
         raise sly.app.DialogWindowWarning(
@@ -43,8 +45,12 @@ def preview_items():
         )
 
     files = [f for f in files if f["type"] == "folder" or (f["type"] == "file" and f["size"] > 0)]
+    sly.logger.debug(msg=f"Current path: {path}.\nInitial items tree before limit: {files}")
+
     if len(files) > g.USER_PREVIEW_LIMIT:
         files.pop()
+
+    sly.logger.debug(msg=f"Current path: {path}.\nInitial items tree after limit: {files}")
 
     tree_items = []
     for file in files:
@@ -54,6 +60,7 @@ def preview_items():
     preview_bucket_items.file_viewer.update_file_tree(files_list=tree_items)
     preview_bucket_items.card.show()
     import_settings.card.show()
+    sly.logger.debug(msg=f"Current path: {path}.\nInitial result items tree: {tree_items}")
 
 
 @preview_bucket_items.file_viewer.path_changed
@@ -66,6 +73,8 @@ def refresh_tree_viewer(current_path):
     path = f"{provider}://{new_path.strip('/')}"
     try:
         files = g.api.remote_storage.list(path, recursive=False, limit=g.USER_PREVIEW_LIMIT + 1)
+        sly.logger.debug(msg=f"Current path: {current_path}.\nRefreshed items tree (try): {files}")
+
     except Exception as e:
         sly.logger.warn(repr(e))
         raise sly.app.DialogWindowWarning(
@@ -75,9 +84,16 @@ def refresh_tree_viewer(current_path):
         )
 
     files = [f for f in files if f["type"] == "folder" or (f["type"] == "file" and f["size"] > 0)]
+    sly.logger.debug(
+        msg=f"Current path: {current_path}.\nRefreshed items tree before limit: {files}"
+    )
 
     if len(files) > g.USER_PREVIEW_LIMIT:
         files.pop()
+
+    sly.logger.debug(
+        msg=f"Current path: {current_path}.\nRefreshed items tree after limit: {files}"
+    )
 
     tree_items = []
     for file in files:
@@ -86,3 +102,7 @@ def refresh_tree_viewer(current_path):
         g.FILE_SIZE[path] = file["size"]
     preview_bucket_items.file_viewer.update_file_tree(files_list=tree_items)
     preview_bucket_items.file_viewer.loading = False
+    sly.logger.debug(
+        msg=f"Current path: {current_path}.\nRefreshed result items tree: {tree_items}"
+    )
+    # sly.app.show_dialog(title=, description=, status="")
