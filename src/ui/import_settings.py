@@ -156,6 +156,9 @@ def list_objects(api, full_dir_path):
         )
         if len(remote_objs) == 0:
             break
+        if last_obj is not None:
+            if remote_objs[-1] == last_obj:
+                break
         last_obj = remote_objs[-1]
         start_after = f'{last_obj["prefix"]}/{last_obj["name"]}'
         yield from remote_objs
