@@ -146,6 +146,7 @@ def import_volumes():
 
 def list_objects(api, full_dir_path):
     start_after = None
+    last_obj = None
     while True:
         remote_objs = api.remote_storage.list(
             path=full_dir_path,
@@ -156,6 +157,9 @@ def list_objects(api, full_dir_path):
         )
         if len(remote_objs) == 0:
             break
+        if last_obj is not None:
+            if remote_objs[-1] == last_obj:
+                break
         last_obj = remote_objs[-1]
         start_after = f'{last_obj["prefix"]}/{last_obj["name"]}'
         yield from remote_objs
