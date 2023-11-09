@@ -52,7 +52,7 @@ def import_volumes():
     local_paths = []
 
     provider = connect_to_bucket.provider_selector.get_value()
-    bucket_name = connect_to_bucket.bucket_name_input.get_value()
+    bucket_name = connect_to_bucket.bucket_name_selector.get_value()
 
     def _add_to_processing_list(path):
         nonlocal remote_paths, local_paths
@@ -135,7 +135,6 @@ def import_volumes():
             sly.batched(remote_paths, batch_size=g.BATCH_SIZE),
             sly.batched(local_paths, batch_size=g.BATCH_SIZE),
         ):
-
             for remote_path, local_path in zip(batch_remote_paths, batch_local_paths):
                 g.api.remote_storage.download_path(remote_path, local_path)
                 pbar.update()
