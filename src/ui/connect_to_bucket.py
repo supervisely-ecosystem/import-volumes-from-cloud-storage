@@ -1,20 +1,52 @@
 import os
 import supervisely as sly
-from supervisely.app.widgets import Button, Card, Container, Field, Input, SelectString
+from supervisely.app.widgets import Button, Card, Container, Text, Input, Select
 
 import src.globals as g
 import src.ui.import_settings as import_settings
 import src.ui.preview_bucket_items as preview_bucket_items
 
-provider_selector = SelectString(
-    values=["google", "s3", "azure"], labels=["google cloud storage", "amazon s3", "azure storage"]
+providers_info = g.api.remote_storage.get_list_available_providers()
+providers = [provider["defaultProtocol"].rstrip(":") for provider in providers_info]
+
+provider_items = [
+    Select.Item(value=provider["defaultProtocol"].rstrip(":"), label=provider["name"])
+    for provider in providers_info
+]
+
+provider_buckets = {
+    provider["defaultProtocol"].rstrip(":"): [
+        Select.Item(value=bucket, label=bucket) for bucket in provider["buckets"]
+    ]
+    for provider in providers_info
+}
+
+provider_selector = Select(
+    items=provider_items,
+    placeholder="Select cloud provider",
+    width_percent=100,
 )
-provider = Field(title="Provider", content=provider_selector)
+
+provider_title = Text("<b>Provider</b>", "text")
+provider = Container([provider_title, provider_selector])
+
+
+bucket_items = []
+if len(providers) > 0:
+    bucket_items = provider_buckets[providers[0]]
+
+bucket_name_selector = Select(
+    items=bucket_items,
+    filterable=True,
+    placeholder="Select bucket",
+    width_percent=100,
+)
 
 bucket_name_input = Input()
 connect_button = Button(text="Connect", icon="zmdi zmdi-cloud")
-bucket_name = Field(title="Bucket name", content=bucket_name_input)
 
+bucket_name_title = Text("<b>Bucket name</b>", "text")
+bucket_name = Container([bucket_name_title, bucket_name_selector])
 
 card = Card(
     title="1️⃣ Connect to the cloud storage",
@@ -25,11 +57,23 @@ card = Card(
 )
 
 
+@provider_selector.value_changed
+def on_provider_changed(provider):
+    if provider == "fs":
+        bucket_name_title.set("<b>Storage ID</b>", "text")
+    else:
+        if bucket_name_title.text == "<b>Storage ID</b>":
+            bucket_name_title.set("<b>Bucket name</b>", "text")
+
+    bucket_name_selector.set(items=provider_buckets[provider])
+    bucket_name_selector.set_value(None)
+
+
 @connect_button.click
 def preview_items():
     g.FILE_SIZE = {}
     provider = provider_selector.get_value()
-    bucket_name = bucket_name_input.get_value()
+    bucket_name = bucket_name_selector.get_value()
 
     path = f"{provider}://{bucket_name}"
     try:
@@ -60,7 +104,7 @@ def preview_items():
 def refresh_tree_viewer(current_path):
     new_path = current_path
     provider = provider_selector.get_value()
-    bucket_name = bucket_name_input.get_value()
+    bucket_name = bucket_name_selector.get_value()
     g.FILE_SIZE = {}
 
     path = f"{provider}://{new_path.strip('/')}"
