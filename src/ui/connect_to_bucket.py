@@ -7,14 +7,23 @@ import src.globals as g
 import src.ui.import_settings as import_settings
 import src.ui.preview_bucket_items as preview_bucket_items
 
-all_providers_info = g.api.remote_storage.get_list_supported_providers()
+
+try:
+    all_providers_info = g.api.remote_storage.get_list_supported_providers()
+except:
+    all_providers_info = []
+
 all_providers = [provider["defaultProtocol"].rstrip(":") for provider in all_providers_info]
 
-providers_info = g.api.remote_storage.get_list_available_providers()
+try:
+    providers_info = g.api.remote_storage.get_list_available_providers()
+except:
+    providers_info = []
+
 providers = [provider["defaultProtocol"].rstrip(":") for provider in providers_info]
 
 provider_items = []
-disabled_items = []
+disabled_items = [Select.Item(value="asd", label="Asd", disabled=True)]
 disabled_items_names = []
 for provider in all_providers_info:
     if provider["defaultProtocol"].rstrip(":") in providers:
@@ -108,9 +117,7 @@ else:
 card = Card(
     title="1️⃣ Connect to the cloud storage",
     description="Choose cloud service provider and bucket name",
-    content=Container(
-        widgets=[provider, bucket_name, connect_button],
-    ),
+    content=card_content,
 )
 
 
