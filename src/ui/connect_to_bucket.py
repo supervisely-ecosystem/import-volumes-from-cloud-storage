@@ -1,18 +1,57 @@
 import os
+
 import supervisely as sly
-from supervisely.app.widgets import Button, Card, Container, Text, Input, Select
+from supervisely.app.widgets import Button, Card, Container, Text, Input, Select, NotificationBox
 
 import src.globals as g
 import src.ui.import_settings as import_settings
 import src.ui.preview_bucket_items as preview_bucket_items
 
+all_providers_info = g.api.remote_storage.get_list_supported_providers()
+all_providers = [provider["defaultProtocol"].rstrip(":") for provider in all_providers_info]
+
 providers_info = g.api.remote_storage.get_list_available_providers()
 providers = [provider["defaultProtocol"].rstrip(":") for provider in providers_info]
 
-provider_items = [
-    Select.Item(value=provider["defaultProtocol"].rstrip(":"), label=provider["name"])
-    for provider in providers_info
-]
+provider_items = []
+disabled_items = []
+disabled_items_names = []
+for provider in all_providers_info:
+    if provider["defaultProtocol"].rstrip(":") in providers:
+        item = Select.Item(value=provider["defaultProtocol"].rstrip(":"), label=provider["name"])
+        provider_items.append(item)
+    else:
+        item = Select.Item(
+            value=provider["defaultProtocol"].rstrip(":"), label=provider["name"], disabled=True
+        )
+        disabled_items.append(item)
+        disabled_items_names.append(item.label)
+
+provider_items.extend(disabled_items)
+
+provider_notification_0 = NotificationBox(
+    title="Cloud Storage Connection Required",
+    description=(
+        "No cloud storage providers are configured. Set up a provider in instance settings to proceed. "
+        "Please connect a provider to your instance using this "
+        "<a href='https://docs.supervisely.com/enterprise-edition/advanced-tuning/s3#links-plugin-cloud-providers-support'>guide</a>. "
+        "You can connect Amazon S3, Microsoft Azure, Google Cloud Storage or any S3 compatible providers. "
+        "If you have any questions, please contact tech support."
+    ),
+    box_type="info",
+)
+
+provider_notification_1 = NotificationBox(
+    title="Сonfigure cloud storage provider in instance settings",
+    description=(
+        "You can set up a new provider in the instance settings. "
+        "To connect a new provider to your instance follow this "
+        "<a href='https://docs.supervisely.com/enterprise-edition/advanced-tuning/s3#links-plugin-cloud-providers-support'>guide</a>. "
+        f"You can connect {', '.join(disabled_items_names)} or any S3 compatible providers. "
+        "If you have any questions, please contact tech support."
+    ),
+    box_type="info",
+)
 
 provider_buckets = {
     provider["defaultProtocol"].rstrip(":"): [
@@ -23,13 +62,15 @@ provider_buckets = {
 
 provider_selector = Select(
     items=provider_items,
-    placeholder="Select cloud provider",
+    placeholder="Select provider",
     width_percent=100,
 )
 
-provider_title = Text("<b>Provider</b>", "text")
-provider = Container([provider_title, provider_selector])
+if len(provider_items) == 0:
+    provider_selector.disable()
 
+providet_title = Text("<b>Provider</b>", "text")
+provider = Container([providet_title, provider_selector])
 
 bucket_items = []
 if len(providers) > 0:
@@ -45,8 +86,24 @@ bucket_name_selector = Select(
 bucket_name_input = Input()
 connect_button = Button(text="Connect", icon="zmdi zmdi-cloud")
 
+if len(provider_items) == 0:
+    provider_selector.disable()
+    bucket_name_selector.disable()
+    connect_button.disable()
+
 bucket_name_title = Text("<b>Bucket name</b>", "text")
 bucket_name = Container([bucket_name_title, bucket_name_selector])
+
+if len(provider_items) == 0:
+    card_content = Container(
+        widgets=[provider_notification_0, provider, bucket_name, connect_button]
+    )
+elif len(disabled_items) > 0:
+    card_content = Container(
+        widgets=[provider_notification_1, provider, bucket_name, connect_button]
+    )
+else:
+    card_content = Container(widgets=[provider, bucket_name, connect_button])
 
 card = Card(
     title="1️⃣ Connect to the cloud storage",
