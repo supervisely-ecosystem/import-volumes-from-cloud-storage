@@ -23,7 +23,7 @@ except:
 providers = [provider["defaultProtocol"].rstrip(":") for provider in providers_info]
 
 provider_items = []
-disabled_items = [Select.Item(value="asd", label="Asd", disabled=True)]
+disabled_items = []
 disabled_items_names = []
 for provider in all_providers_info:
     if provider["defaultProtocol"].rstrip(":") in providers:
