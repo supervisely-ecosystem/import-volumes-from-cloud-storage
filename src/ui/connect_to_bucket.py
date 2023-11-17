@@ -62,12 +62,20 @@ provider_notification_1 = NotificationBox(
     box_type="info",
 )
 
-provider_buckets = {
-    provider["defaultProtocol"].rstrip(":"): [
-        Select.Item(value=bucket, label=bucket) for bucket in provider["buckets"]
-    ]
-    for provider in providers_info
-}
+
+no_buckets_notification = Text("You don't have any available buckets in this cloud storage", "warning")
+no_buckets_notification.hide()
+
+provider_buckets = {}
+for provider in providers_info:
+    if provider.get("buckets") is not None:
+        provider_buckets[provider["defaultProtocol"].rstrip(":")] = [
+            Select.Item(value=bucket, label=bucket) for bucket in provider["buckets"]
+        ]
+    else:
+        provider_buckets[provider["defaultProtocol"].rstrip(":")] = []
+
+
 
 provider_selector = Select(
     items=provider_items,
@@ -112,7 +120,7 @@ elif len(disabled_items) > 0:
         widgets=[provider_notification_1, provider, bucket_name, connect_button]
     )
 else:
-    card_content = Container(widgets=[provider, bucket_name, connect_button])
+    card_content = Container(widgets=[provider, bucket_name, no_buckets_notification, connect_button])
 
 card = Card(
     title="1️⃣ Connect to the cloud storage",
@@ -123,11 +131,16 @@ card = Card(
 
 @provider_selector.value_changed
 def on_provider_changed(provider):
+    no_buckets_notification.hide()
+    
     if provider == "fs":
         bucket_name_title.set("<b>Storage ID</b>", "text")
     else:
         if bucket_name_title.text == "<b>Storage ID</b>":
             bucket_name_title.set("<b>Bucket name</b>", "text")
+
+    if len(provider_buckets[provider]) == 0:
+        no_buckets_notification.show()
 
     bucket_name_selector.set(items=provider_buckets[provider])
     bucket_name_selector.set_value(None)
