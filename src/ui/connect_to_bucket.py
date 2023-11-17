@@ -113,11 +113,11 @@ bucket_name = Container([bucket_name_title, bucket_name_selector])
 
 if len(provider_items) == 0:
     card_content = Container(
-        widgets=[provider_notification_0, provider, bucket_name, connect_button]
+        widgets=[provider_notification_0, provider, bucket_name, no_buckets_notification, connect_button]
     )
 elif len(disabled_items) > 0:
     card_content = Container(
-        widgets=[provider_notification_1, provider, bucket_name, connect_button]
+        widgets=[provider_notification_1, provider, bucket_name, no_buckets_notification, connect_button]
     )
 else:
     card_content = Container(widgets=[provider, bucket_name, no_buckets_notification, connect_button])
