@@ -73,9 +73,9 @@ def import_volumes():
     # find selected directories
     selected_dirs = []
     for path in paths:
-        if sly.fs.get_file_ext(path) == "":
+        if path["type"] == "folder":
             # path to directory
-            selected_dirs.append(path)
+            selected_dirs.append(path["path"])
 
     # get all files from selected dirs
     if len(selected_dirs) > 0:
@@ -101,8 +101,8 @@ def import_volumes():
 
     # get other selected files
     for path in paths:
-        if sly.fs.get_file_ext(path) != "":
-            _add_to_processing_list(path)
+        if path["type"] == "file":
+            _add_to_processing_list(path["path"])
 
     if len(local_paths) == 0:
         raise sly.app.DialogWindowWarning(

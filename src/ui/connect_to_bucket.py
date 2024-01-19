@@ -86,12 +86,12 @@ provider_selector = Select(
 if len(provider_items) == 0:
     provider_selector.disable()
 
-providet_title = Text("<b>Provider</b>", "text")
-provider = Container([providet_title, provider_selector])
+provider_title = Text("<b>Provider</b>", "text")
+provider = Container([provider_title, provider_selector])
 
 bucket_items = []
 if len(providers) > 0:
-    bucket_items = provider_buckets[providers[0]]
+    bucket_items = provider_buckets[provider_items[0].value]
 
 bucket_name_selector = Select(
     items=bucket_items,

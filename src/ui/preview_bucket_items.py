@@ -1,6 +1,9 @@
 from supervisely.app.widgets import Card, FileViewer
 
-file_viewer = FileViewer(files_list=[])
+file_viewer = FileViewer(
+    files_list=[],
+    extended_selection=True,
+)
 
 card = Card(
     title="2️⃣ Preview bucket and select items",
