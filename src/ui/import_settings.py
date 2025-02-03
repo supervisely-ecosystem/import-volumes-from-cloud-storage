@@ -136,7 +136,7 @@ def import_volumes():
             sly.batched(local_paths, batch_size=g.BATCH_SIZE),
         ):
             for remote_path, local_path in zip(batch_remote_paths, batch_local_paths):
-                g.api.remote_storage.download_path(remote_path, local_path)
+                g.api.remote_storage.download_path(remote_path, local_path, team_id=g.TEAM_ID)
                 pbar.update()
 
         local_dir = os.path.join(g.STORAGE_DIR, bucket_name)
@@ -153,6 +153,7 @@ def list_objects(api, full_dir_path):
             folders=False,
             recursive=True,
             start_after=start_after,
+            team_id=g.TEAM_ID,
         )
         if len(remote_objs) == 0:
             break
