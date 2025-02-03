@@ -1,7 +1,0 @@
-# supervisely==6.73.162
-git+https://github.com/supervisely/supervisely.git@remote-storage-group
-
-#formatter
-black
-#sorter
-isort
